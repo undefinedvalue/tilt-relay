@@ -1,0 +1,21 @@
+{
+    "runInTerminal.commands": [
+        {
+            "match": "\\.rs$",
+            "name": "run",
+            "cmd": "cargo run"
+        }, 
+        {
+            "match": "\\.rs$",
+            "name": "run-release",
+            "cmd": "cargo run --release"
+        }, 
+        {
+            "match": "\\.rs$",
+            "name": "stop",
+            "cmd": "\u0003"
+        },
+    ],
+    "rust-analyzer.checkOnSave.allTargets": false,
+    "rust-analyzer.showUnlinkedFileNotification": false,
+}

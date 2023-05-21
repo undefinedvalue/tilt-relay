@@ -1,0 +1,37 @@
+[package]
+name = "tilt-relay"
+version = "0.0.0"
+authors = ["Anna"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[profile.dev]
+# Required for esp-wifi
+lto = "off"
+
+[profile.release]
+# Required for esp-wifi
+lto = "off"
+
+[profile.dev.package.esp-wifi]
+opt-level = 3
+
+[dependencies]
+critical-section = { version = "1.1.1" }
+embassy-executor  = { package = "embassy-executor", git = "https://github.com/embassy-rs/embassy", rev = "cd9a65b", features = ["nightly", "integrated-timers"] }
+embassy-futures = { version = "0.1.0" }
+embassy-net = { git = "https://github.com/embassy-rs/embassy", rev = "fb27594", features = ["nightly", "tcp", "dns", "medium-ethernet"] }
+embassy-sync = { verstion = "0.2.0" }
+embassy-time = { version = "0.1.1" }
+embedded-hal = { version = "=1.0.0-alpha.10" }
+embedded-io = { version = "0.4.0" }
+embedded-svc = { version = "0.24.0", default-features = false }
+esp32c3-hal = { version = "0.9.0", features = ["eh1", "embassy", "embassy-time-timg0"] }
+esp-println = { version = "0.5.0", default-features = false, features = ["esp32c3", "uart"] }
+esp-wifi = { git = "https://github.com/esp-rs/esp-wifi", rev = "c446177", features = ["esp32c3", "esp32c3-async", "ble", "wifi", "embedded-svc", "async", "embassy-net", "big-heap"] }
+fugit = { version = "0.3.6" }
+log = { version = "0.4.17", default-features = false }
+libm = { version = "0.2.6" }
+riscv = { version = "0.10.0" }
+smoltcp = { version = "0.9.1", default-features=false }
+static_cell = { version = "1.0.0" }
