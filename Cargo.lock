@@ -69,6 +69,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "atomic-waker"
+version = "1.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1181e1e0d1fce796a03db1ae795d67167da795f9cf4a39c37589e85ef57f26d3"
+
+[[package]]
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -259,7 +265,7 @@ dependencies = [
  "embassy-net-driver",
  "embassy-sync 0.2.0 (git+https://github.com/embassy-rs/embassy?rev=fb27594)",
  "embassy-time 0.1.1 (git+https://github.com/embassy-rs/embassy?rev=fb27594)",
- "embedded-io 0.4.0",
+ "embedded-io",
  "embedded-nal-async",
  "futures",
  "generic-array 0.14.7",
@@ -282,7 +288,7 @@ dependencies = [
  "atomic-polyfill 1.0.2",
  "cfg-if",
  "critical-section",
- "embedded-io 0.4.0",
+ "embedded-io",
  "futures-util",
  "heapless",
 ]
@@ -295,7 +301,7 @@ checksum = "a0dad296a6f70bfdc32ef52442a31f98c28e1608893c1cecc9b6f419bab005a0"
 dependencies = [
  "cfg-if",
  "critical-section",
- "embedded-io 0.4.0",
+ "embedded-io",
  "futures-util",
  "heapless",
 ]
@@ -307,7 +313,7 @@ source = "git+https://github.com/embassy-rs/embassy?rev=fb27594#fb27594b2eb2cca2
 dependencies = [
  "cfg-if",
  "critical-section",
- "embedded-io 0.4.0",
+ "embedded-io",
  "futures-util",
  "heapless",
 ]
@@ -409,12 +415,6 @@ dependencies = [
 
 [[package]]
 name = "embedded-io"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33dfba9e6c113f2fd8537c943780a7345945e66c86972e356b1152e19481bcf5"
-
-[[package]]
-name = "embedded-io"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef1a6892d9eef45c8fa6b9e0086428a2cca8491aca8f787c534a3d6d0bcb3ced"
@@ -436,7 +436,7 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "27ce84f518ca912777ec143db235f4d615e3bf8d4e46d507d6ef12daf5b1df98"
 dependencies = [
- "embedded-io 0.4.0",
+ "embedded-io",
  "embedded-nal",
  "heapless",
  "no-std-net 0.6.0",
@@ -444,11 +444,12 @@ dependencies = [
 
 [[package]]
 name = "embedded-svc"
-version = "0.24.0"
+version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2079f8182848872fb6e8eed2c1ba3aea409fc71984a9e8090733c08c404e7864"
+checksum = "c4b70d70bd45c40027ed1c997ec3fb63ffb7237d5b2ad7b7da89adf0c3b93c71"
 dependencies = [
- "embedded-io 0.3.1",
+ "atomic-waker",
+ "embedded-io",
  "enumset",
  "heapless",
  "no-std-net 0.5.0",
@@ -553,7 +554,7 @@ dependencies = [
 [[package]]
 name = "esp-wifi"
 version = "0.1.0"
-source = "git+https://github.com/esp-rs/esp-wifi?rev=c446177#c446177984b82b5e1658d6b24318e7214460ded8"
+source = "git+https://github.com/esp-rs/esp-wifi?rev=8e35b68#8e35b68c4aaed2c6a4d1159dd1c1287a5a2359be"
 dependencies = [
  "atomic-polyfill 1.0.2",
  "critical-section",
@@ -562,7 +563,7 @@ dependencies = [
  "embassy-net-driver",
  "embassy-sync 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "embedded-hal 0.2.7",
- "embedded-io 0.4.0",
+ "embedded-io",
  "embedded-svc",
  "enumset",
  "esp-hal-common",
@@ -582,7 +583,7 @@ dependencies = [
 [[package]]
 name = "esp-wifi-sys"
 version = "0.1.0"
-source = "git+https://github.com/esp-rs/esp-wifi?rev=c446177#c446177984b82b5e1658d6b24318e7214460ded8"
+source = "git+https://github.com/esp-rs/esp-wifi?rev=8e35b68#8e35b68c4aaed2c6a4d1159dd1c1287a5a2359be"
 dependencies = [
  "anyhow",
 ]
@@ -1182,7 +1183,7 @@ dependencies = [
  "embassy-sync 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "embassy-time 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "embedded-hal 1.0.0-alpha.10",
- "embedded-io 0.4.0",
+ "embedded-io",
  "embedded-svc",
  "esp-println",
  "esp-wifi",

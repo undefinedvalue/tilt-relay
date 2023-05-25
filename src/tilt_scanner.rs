@@ -1,5 +1,5 @@
 use embassy_time::Instant;
-use embedded_io::blocking::{Read, Write};
+use embedded_io::blocking::Write;
 use esp32c3_hal::radio::Bluetooth;
 use esp_wifi::ble::controller::BleConnector;
 use log::{info, warn};
@@ -91,7 +91,7 @@ impl TiltScanner {
 
     /// Writes the given HCI Command packet to the Bluetooth controller. This
     /// waits for the HCI Command Complete Event packet from the controller
-    /// controller to ensure it was fully processed with no errors.
+    /// to ensure it was fully processed with no errors.
     fn write_cmd(&mut self, packet: &[u8]) {
         let opcode_lsb = packet[1];
         let opcode_msb = packet[2];
@@ -100,45 +100,27 @@ impl TiltScanner {
         self.ble.flush().unwrap();
         
         // Wait for a command complete event with the opcode we just sent
-        let mut buffer = [0u8; 1024];
+        let mut buffer = [0u8; 256];
         loop {
-            let len = self.ble.read(&mut buffer).unwrap();
-            let mut buf = &buffer[..len];
+            let len = self.ble.get_next(&mut buffer).unwrap();
 
-            // read continuously streams packet data, causing packets to be
-            // concatenated even though they come from the bluetooth controller
-            // individually. That means we need to decode them enough to skip.
-            // https://github.com/esp-rs/esp-wifi/issues/174
-            while buf.len() >= 7 {
-                if buf[0] != PACKET_TYPE_EVENT {
-                    // Shouldn't happen given the types of bluetooth operations
-                    // we are performing.
-                    panic!("Unexpected packet type: {:02X?}", &buffer[..len]);
-                }
+            if len != 7 || buffer[0] != PACKET_TYPE_EVENT || buffer[1] != EVENT_COMMAND_COMPLETE {
+                continue;
+            }
 
-                if buf[1] != EVENT_COMMAND_COMPLETE {
-                    // Skip to the next packet. The length of the event data is
-                    // in buf[2], plus plus 3 bytes for the header (packet type,
-                    // event type, and event data length).
-                    let event_len = (buf[2] + 3) as usize;
-                    buf = &buf[event_len..];
-                    continue;
-                }
+            // The 2-byte opcode should match the opcode for the command
+            // that was just written. If it doesn't, then some other command
+            // was issued without waiting for this event, which shouldn't
+            // happen since that's what we're doing now.
+            if buffer[4] != opcode_lsb || buffer[5] != opcode_msb {
+                panic!("Unhandled Command Complete Event: {:02X?}", &buffer)
+            }
 
-                // The 2-byte opcode should match the opcode for the command
-                // that was just written. If it doesn't, then some other command
-                // was issued without waiting for this event, which shouldn't
-                // happen since that's what we're doing now.
-                if buf[4] != opcode_lsb || buf[5] != opcode_msb {
-                    panic!("Unhandled Command Complete Event: {:02X?}", &buf)
-                }
-
-                // The last byte is the exit code, with 0 indicating success
-                if buf[6] != 0x00 {
-                    panic!("HCI command failed. Error code: {}. Command: {:02X?}", buf[6], packet);
-                } else {
-                    return;
-                }
+            // The last byte is the exit code, with 0 indicating success
+            if buffer[6] != 0x00 {
+                panic!("HCI command failed. Error code: {}. Command: {:02X?}", buffer[6], packet);
+            } else {
+                break;
             }
         }
     }
@@ -148,7 +130,7 @@ impl TiltScanner {
         let mut buffer = [0u8; 256];
 
         loop {
-            match self.ble.read(&mut buffer) {
+            match self.ble.get_next(&mut buffer) {
                 Err(e) => {
                     warn!("Read error: {:?}", e);
                 }
@@ -171,7 +153,7 @@ impl TiltScanner {
         while Instant::now() < scan_end_time {
             embassy_futures::yield_now().await;
 
-            match self.ble.read(&mut buffer) {
+            match self.ble.get_next(&mut buffer) {
                 Err(e) => {
                     warn!("Read error: {:?}", e);
                 }

@@ -25,10 +25,10 @@ embassy-sync = { verstion = "0.2.0" }
 embassy-time = { version = "0.1.1" }
 embedded-hal = { version = "=1.0.0-alpha.10" }
 embedded-io = { version = "0.4.0" }
-embedded-svc = { version = "0.24.0", default-features = false }
+embedded-svc = { version = "0.25.0", default-features = false }
 esp32c3-hal = { version = "0.9.0", features = ["eh1", "embassy", "embassy-time-timg0"] }
 esp-println = { version = "0.5.0", default-features = false, features = ["esp32c3", "uart"] }
-esp-wifi = { git = "https://github.com/esp-rs/esp-wifi", rev = "c446177", features = ["esp32c3", "esp32c3-async", "ble", "wifi", "embedded-svc", "async", "embassy-net", "big-heap"] }
+esp-wifi = { git = "https://github.com/esp-rs/esp-wifi", rev = "8e35b68", features = ["esp32c3", "esp32c3-async", "ble", "wifi", "embassy-net", "big-heap"] }
 fugit = { version = "0.3.6" }
 log = { version = "0.4.17", default-features = false }
 libm = { version = "0.2.6" }
